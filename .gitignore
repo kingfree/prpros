@@ -1,2 +1,13 @@
 .DS_Store
 
+*.img
+*.hrb
+*.obj
+*.bim
+*.gas
+*.bin
+*.lst
+*.map
+*.lib
+*.sys
+*.org
