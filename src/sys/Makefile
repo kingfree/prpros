@@ -1,6 +1,6 @@
-OBJS_BOOTPACK = bootpack.obj naskfunc.obj hankaku.obj graphic.obj dsctbl.obj \
+OBJS_BOOTPACK = bootpack.obj naskfunc.obj graphic.obj dsctbl.obj \
 		int.obj fifo.obj keyboard.obj mouse.obj memory.obj sheet.obj timer.obj \
-		mtask.obj window.obj console.obj file.obj tek.obj
+		mtask.obj window.obj console.obj file.obj tek.obj utf-8.obj
 
 TOOLPATH = ../../z_tools/
 INCPATH  = ../../z_tools/haribote/
@@ -13,6 +13,7 @@ OBJ2BIM  = $(TOOLPATH)obj2bim.exe
 MAKEFONT = $(TOOLPATH)makefont.exe
 BIN2OBJ  = $(TOOLPATH)bin2obj.exe
 BIM2HRB  = $(TOOLPATH)bim2hrb.exe
+BIM2BIN  = $(TOOLPATH)bim2bin.exe
 RULEFILE = ../Makefile.rule
 EDIMG    = $(TOOLPATH)edimg.exe
 IMGTOL   = $(TOOLPATH)imgtol.com
@@ -33,12 +34,6 @@ ipl10.bin : ipl10.nas Makefile
 
 asmhead.bin : asmhead.nas Makefile
 	$(NASK) asmhead.nas asmhead.bin asmhead.lst
-
-hankaku.bin : ZpixEX2-12.fnt Makefile
-	$(COPY) ZpixEX2-12.fnt hankaku.bin
-
-hankaku.obj : hankaku.bin Makefile
-	$(BIN2OBJ) hankaku.bin hankaku.obj _hankaku
 
 bootpack.bim : $(OBJS_BOOTPACK) Makefile
 	$(OBJ2BIM) @$(RULEFILE) out:bootpack.bim stack:3136k map:bootpack.map \
@@ -66,7 +61,6 @@ pripara.sys : asmhead.bin bootpack.hrb Makefile
 
 clean :
 	-$(DEL) asmhead.bin
-	-$(DEL) hankaku.bin
 	-$(DEL) *.lst
 	-$(DEL) *.obj
 	-$(DEL) *.map

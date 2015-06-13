@@ -15,6 +15,7 @@ default :
 # 文件生成规则
 
 pripara.img : sys/ipl10.bin sys/pripara.sys \
+		font/unifont.fnt \
 		app/a/a.hrb \
 		app/beepdown/beepdown.hrb \
 		app/color/color.hrb \
@@ -39,6 +40,7 @@ pripara.img : sys/ipl10.bin sys/pripara.sys \
 	$(EDIMG)   imgin:../z_tools/fdimg0at.tek \
 		wbinimg src:sys/ipl10.bin len:512 from:0 to:0 \
 		copy from:sys/pripara.sys to:@: \
+		copy from:font/unifont.fnt to:@: \
 		copy from:sys/ipl10.nas to:@: \
 		copy from:sys/int.c to:@: \
 		copy from:app/a/a.hrb to:@: \

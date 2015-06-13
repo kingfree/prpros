@@ -176,8 +176,9 @@ void cons_newline(console* cons)
 
 void cons_putstr0(console* cons, char* s)
 {
-    for (; *s != 0; s++) {
-        cons_putchar(cons, *s, 1);
+    int c;
+    while (s = utf8char(s, &c)) {
+        cons_putchar(cons, c, 1);
     }
     return;
 }
