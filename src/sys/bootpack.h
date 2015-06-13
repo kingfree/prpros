@@ -2,7 +2,7 @@
 #define BOOTPACK_H
 
 #define SYSNAME "PriPara OS"
-#define SYSVERS "28"
+#define SYSVERS "29"
 #define SYSNAMEVER SYSNAME " " SYSVERS
 
 /* asmhead.nas */
@@ -353,6 +353,11 @@ typedef struct FILEINFO {
 void file_readfat(int* fat, unsigned char* img);
 void file_loadfile(int clustno, int size, char* buf, int* fat, char* img);
 fileinfo* file_search(char* name, fileinfo* finfo, int max);
+char *file_loadfile2(int clustno, int *psize, int *fat);
+
+/* tek.c */
+int tek_getsize(unsigned char *p);
+int tek_decomp(unsigned char *p, char *q, int size);
 
 /* bootpack.c */
 task_t* open_constask(sheet_t* sht, unsigned int memtotal);
