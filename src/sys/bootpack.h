@@ -64,8 +64,10 @@ void boxfill8(unsigned char* vram, int X, unsigned char c,
 void boxsize8(unsigned char* vram, int X, unsigned char c,
     int x0, int y0, int width, int height);
 void init_screen8(char* vram, int x, int y);
-void putfont8(char* vram, int xsize, int x, int y, char c, char* font);
-void putfonts8_asc(char* vram, int xsize, int x, int y, char c, int* s);
+int ishalf(const unsigned char* font);
+void putfont8(char* vram, int xsize, int x, int y, char c, unsigned char* font);
+void putfont16(char* vram, int xsize, int x, int y, char c, unsigned char* font);
+void putfonts8_asc(char* vram, int xsize, int x, int y, char c, char* s);
 void init_mouse_cursor8(char* mouse, char bc);
 void putblock8_8(char* vram, int vxsize, int pxsize,
     int pysize, int px0, int py0, char* buf, int bxsize);
@@ -337,6 +339,7 @@ void cmd_dir(console* cons);
 void cmd_exit(console* cons, int* fat);
 void cmd_start(console* cons, char* cmdline, int memtotal);
 void cmd_open(console* cons, char* cmdline, int memtotal);
+void cmd_font(console* cons);
 int cmd_app(console* cons, int* fat, char* cmdline);
 int* hrb_api(int edi, int esi, int ebp, int esp, int ebx, int edx, int ecx, int eax);
 int* inthandler0c(int* esp);

@@ -207,6 +207,8 @@ void cons_runcmd(char* cmdline, console* cons, int* fat, unsigned int memtotal)
         cmd_start(cons, cmdline, memtotal);
     } else if (strncmp(cmdline, "open ", 5) == 0) {
         cmd_open(cons, cmdline, memtotal);
+    } else if (strcmp(cmdline, "font") == 0) {
+        cmd_font(cons);
     } else if (cmdline[0] != 0) {
         if (cmd_app(cons, fat, cmdline) == 0) {
             /* 不是有效命令，也不是空行 */
@@ -224,6 +226,58 @@ void cmd_mem(console* cons, unsigned int memtotal)
     char s[CONS_COLN];
     sprintf(s, "total %9dMB\nfree %10dKB\n", memtotal / (1024 * 1024), memman_total(memman) / 1024);
     cons_putstr0(cons, s);
+    return;
+}
+
+void cmd_font(console* cons)
+{
+    unsigned char *unifont = (unsigned char*)*((int*)0x0fe8);
+    unsigned char *font = {0xaa,
+0xaa,
+0x00,
+0x01,
+0x80,
+0x00,
+0x00,
+0x01,
+0x80};
+    int i, j;
+    int x, y;
+    sheet_t* sheet = cons->sht;
+    for (y = CONS_TOP; y < CONS_TOP + CONS_LINH; y++) {
+        for (x = CONS_LEFT; x < CONS_LEFT + CONS_COLW; x++) {
+            sheet->buf[x + y * sheet->bxsize] = base3;
+        }
+    }
+    int color = base03;
+    x = CONS_LEFT;// + (j * FNT_W) % sheet->bxsize;
+    y = CONS_TOP + 80;//  + (j * FNT_H) / sheet->bxsize;
+    static char* s = "AB !";
+    char* p = s;
+    int code;
+    while (p = utf8char(p, &code)) {
+        font = unifont + (code * FNT_S);
+        for (i = 0; i < 32; i++) {
+            x++;
+            sheet->buf[x + y * sheet->bxsize] = (int)(font[i] & 0x00F0);
+            x++;
+            sheet->buf[x + y * sheet->bxsize] = (int)(font[i] & 0x00F0);
+        }
+        y+=2;
+        x = CONS_LEFT;
+            // if (ishalf(font)) {
+        //     putfont8(sheet->buf, sheet->bxsize, x, y, color, font);
+        //     x += FNT_W;
+        // } else {
+        //     putfont16(sheet->buf, sheet->bxsize, x, y, color, font);
+        //     x += FNT_Q;
+        // }
+        // for (y = CONS_TOP; y < CONS_TOP + FNT_H; y++) {
+        //     sheet->buf[x + y * sheet->bxsize] = red;
+        // }
+
+    }
+    sheet_refresh(sheet, CONS_LEFT, CONS_TOP, CONS_LEFT + CONS_COLW, CONS_TOP + CONS_LINH);
     return;
 }
 

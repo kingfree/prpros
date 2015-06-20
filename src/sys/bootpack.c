@@ -105,7 +105,6 @@ void HariMain(void)
     keywin_on(key_win);
 
     /* 加载unifont.fnt */
-    unifont = (unsigned char *) memman_alloc_4k(memman, FNT_A);
     fat = (int *) memman_alloc_4k(memman, 4 * 2880);
     file_readfat(fat, (unsigned char *) (ADR_DISKIMG + 0x000200));
     finfo = file_search("unifont.fnt", (fileinfo *) (ADR_DISKIMG + 0x002600), 224);

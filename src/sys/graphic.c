@@ -91,11 +91,11 @@ void boxsize8(unsigned char* vram, int X, unsigned char c,
     return;
 }
 
-
-void putfont8(char* vram, int xsize, int x, int y, char c, char* font)
+void putfont8(char* vram, int xsize, int x, int y, char c, unsigned char* font)
 {
     int i;
-    char *p, d /* data */;
+    char *p;
+    unsigned char d;
     for (i = 0; i < FNT_H; i++) {
         p = vram + (y + i) * xsize + x;
         d = font[i];
@@ -111,10 +111,11 @@ void putfont8(char* vram, int xsize, int x, int y, char c, char* font)
     return;
 }
 
-void putfont16(char* vram, int xsize, int x, int y, char c, char* font)
+void putfont16(char* vram, int xsize, int x, int y, char c, unsigned char* font)
 {
     int i;
-    char *p, d /* data */;
+    char *p;
+    unsigned char d;
     for (i = 0; i < FNT_H; i++) {
         p = vram + (y + i) * xsize + x;
         d = font[i * 2];
@@ -126,21 +127,20 @@ void putfont16(char* vram, int xsize, int x, int y, char c, char* font)
         if ((d & 0x04) != 0) { p[5] = c; }
         if ((d & 0x02) != 0) { p[6] = c; }
         if ((d & 0x01) != 0) { p[7] = c; }
-        p += 8;
         d = font[i * 2 + 1];
-        if ((d & 0x80) != 0) { p[0] = c; }
-        if ((d & 0x40) != 0) { p[1] = c; }
-        if ((d & 0x20) != 0) { p[2] = c; }
-        if ((d & 0x10) != 0) { p[3] = c; }
-        if ((d & 0x08) != 0) { p[4] = c; }
-        if ((d & 0x04) != 0) { p[5] = c; }
-        if ((d & 0x02) != 0) { p[6] = c; }
-        if ((d & 0x01) != 0) { p[7] = c; }
+        if ((d & 0x80) != 0) { p[8] = c; }
+        if ((d & 0x40) != 0) { p[9] = c; }
+        if ((d & 0x20) != 0) { p[10] = c; }
+        if ((d & 0x10) != 0) { p[11] = c; }
+        if ((d & 0x08) != 0) { p[12] = c; }
+        if ((d & 0x04) != 0) { p[13] = c; }
+        if ((d & 0x02) != 0) { p[14] = c; }
+        if ((d & 0x01) != 0) { p[15] = c; }
     }
     return;
 }
 
-int ishalf(const char *font)
+int ishalf(const unsigned char *font)
 {
     font += FNT_H;
     int i;
@@ -152,12 +152,14 @@ int ishalf(const char *font)
     return 1; /* 半角字符 */
 }
 
-void putfonts8_asc(char* vram, int xsize, int x, int y, char color, int* s)
+void putfonts8_asc(char* vram, int xsize, int x, int y, char color, char* s)
 {
-    char *unifont = (char*)*((int*)0x0fe8);
-    char *font;
-    for (; *s; s++) {
-        font = unifont + (*s * FNT_S);
+    unsigned char *unifont = (unsigned char*)*((int*)0x0fe8);
+    unsigned char *font;
+    char* p = s;
+    int code;
+    while (p = utf8char(p, &code)) {
+        font = unifont + (code * FNT_S);
         if (ishalf(font)) {
             putfont8(vram, xsize, x, y, color, font);
             x += FNT_W;
@@ -166,7 +168,6 @@ void putfonts8_asc(char* vram, int xsize, int x, int y, char color, int* s)
             x += FNT_Q;
         }
     }
-
     return;
 }
 

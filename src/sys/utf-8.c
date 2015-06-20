@@ -76,7 +76,7 @@ char* utf8char(const char* s, int* code)
         }
         c = utf8[index++];
         *code = codepoint;
-        return &utf8[index - 1];
+        return (char*)&utf8[index - 1];
     }
     return 0;
 }
